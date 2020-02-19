@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <openerp>
+        <data>
+             <menuitem
+                    id="menu_dev_parent"
+                    name="Developements"
+                    parent="mail.mail_feeds"
+                    sequence="20"
+                />
+                <act_window
+                    id="action_dev_manager"
+                    name="Developments Manager"
+                    res_model="dev.request"
+                    view_mode="tree,form"
+                />
+                <menuitem
+                    id="menu_dev_manager"
+                    name="Developments Manager"
+                    parent="mail.mail_feeds"
+                    sequence="20"
+                    action="action_dev_manager"
+                />
+                <act_window
+                    id="action_dev_man_task"
+                    name="Developments Manager Task"
+                    res_model="dev.request.task"
+                    view_mode="kanban,tree,form,graph"
+                />
+                <menuitem
+                    id="menu_dev_manager_task"
+                    name="Developments Manager Tasks"
+                    parent="menu_dev_parent"
+                    sequence="20"
+                    action="action_dev_man_task"
+                />
+        
+          <record id="Development Task Kanban" model="ir.ui.view">
+            <field name="name">Developement Task Kanban</field>
+            <field name="model">dev.request.task</field>
+            <field name="arch" type="xml"> 
+               <kanban default_group_by="devreq_id" default_order="date_deadline" quick_create="false">
+                <templates>
+                <t t-name="kanban-box">
+                <div class="oe_kanban_card">
+                    <div class="oe_kanban_content">
+                        <h4><a type="open"><field name="name"/></a></h4>
+                        <ul>
+                            <li><field name="user_id"/></li>
+                            <li><field name="date_deadline"/></li>
+                        </ul>
+                        <div class="oe_kanban_bottom_rigth">
+                            <field name="kanban_state" widget="kanban_state_selection"/>
+                        </div>
+                        <div class="oe_kanban_foote_left">
+                            <field name="priority" widget="priority"/>
+                        </div>
+                </div>
+                </div>
+                </t>
+                </templates>
+                </kanban>
+            </field>
+        </record> 
+                 <record id="view_form_dev_req" model="ir.ui.view">
+                    <field name="name">Developement Request Form</field>
+                    <field name="model">dev.request</field>
+                    <field name="arch" type="xml">
+                        <form string="Request">
+                            <header>
+                            </header>
+                            <sheet string="Request">
+                                <group name="group_top">
+                                <group name="group_left">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="client_id"/>
+                                </group>
+                                <group name="group_rigth">
+                                    <field name="date_creation"/>
+                                    <field name="date_release"/>
+                                    <field name="active" readonly="1"/>
+                                </group>
+                                </group>
+                                <!-- explicar el notebook en el documento -->
+                                <notebook colspan="1">
+                                    <page string="Tareas">
+                                    <!-- para usar este campo hay que declararlo hay que declararlo en el modelo task_id 
+                                    y esto lo que hace es usar el widget de one2many_list de Odoo para mostrar todas las solicitudes de un cliente
+                                    -->
+                                        <field name="task_ids" nolabel="1" widget="one2many_list">
+                                        <tree string="Tareas" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="devreq_id" invisible="1"/>
+                                            <field name="date_deadline"/>
+                                            <field name="horas"/>
+                                            <field name="user_id"/>
+                                            <field name="id_done"/>
+                                        </tree>
+                                        </field>
+                                    </page>
+                                </notebook>
+                            </sheet>
+                        </form>
+                    </field>
+                    </record>
+                <record id="view_tree_dev_man" model="ir.ui.view">
+                    <field name="name">Dev request</field>
+                    <field name="model">dev.request</field>
+                    <field name="arch" type="xml">
+                        <tree>
+                            <field name="name"/>
+                            <field name="client_id"/>
+                            <field name="date_release"/>
+                        </tree>
+                    </field>
+                </record>
+                <record id="view_graph_dev_man" model="ir.ui.view">
+                    <field name="name">Dev request tasks</field>
+                    <field name="model">dev.request.task</field>
+                    <field name="arch" type="xml">
+                        <graph string="Horas por responsable">
+                            <field name="user_id"/>
+                            <field name="horas" type="measure"/>
+                        </graph>
+                    </field>
+                </record>
+        </data>
+    </openerp>
+
+
+        

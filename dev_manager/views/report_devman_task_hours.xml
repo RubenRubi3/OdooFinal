@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <openerp>
+        <data>
+           <template id="report_devman_task_hours_document">
+            <t t-call="report.external_layout">
+                <div class="page">
+                    <div class="row">
+                        <h3>Solicitudes</h3>
+                    </div>
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th style="width:35%;">Solicitud</th>
+                                <th style="width:15%;">Total horas</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        <t t-foreach="docs" t-as="o">
+                            <tr>
+                            <td style="width:25%;"><span t-field="o.name"/></td>
+                            <t t-set="test_variable" t-value="0"/>
+                            <t t-foreach="o.task_ids" t-as="l">
+                                <t t-set="test_variable" t-value="test_variable+l.horas"/>
+                            </t>
+                            <td class="text-rigth">
+                            <!-- esto es para escribir variables a parte -->
+                                <span t-esc="test_variable"/>
+                            </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                    </table>
+                </div>
+                </t>
+           </template>
+
+           <template id="report_devman_task_hours">
+                <t t-call="report.html_container">
+                    <t t-foreach="doc_ids" t-as="doc_id">
+                        <t t-raw="translate_doc(doc_id, doc_model, 'client_id.lang','dev_manager.report_devman_task_hours_document')"/>
+                    </t>
+                </t>
+           </template>
+        </data>
+    </openerp>
